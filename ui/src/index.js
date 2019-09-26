@@ -3,6 +3,9 @@ import { version } from '../package.json'
 import EasyForm from './components/EasyForm'
 import EasyField from './components/EasyField'
 
+import BrokenDateUtils from './components/fields/BrokenDateUtils'
+import BrokenSelect from './components/fields/BrokenSelect'
+
 import EfBtn from './components/fields/EfBtn'
 import EfButtons from './components/fields/EfButtons'
 import EfForm from './components/fields/EfForm'
@@ -22,6 +25,9 @@ export {
 
   EasyForm,
   EasyField,
+
+  BrokenDateUtils,
+  BrokenSelect,
 
   EfBtn,
   EfButtons,
@@ -44,6 +50,9 @@ export default {
   EasyForm,
   EasyField,
 
+  BrokenDateUtils,
+  BrokenSelect,
+
   EfBtn,
   EfButtons,
   EfForm,
@@ -61,6 +70,9 @@ export default {
   install (Vue) {
     Vue.component(EasyField.name, EasyField)
     Vue.component(EasyForm.name, EasyForm)
+
+    Vue.component(BrokenDateUtils.name, BrokenDateUtils)
+    Vue.component(BrokenSelect.name, BrokenSelect)
 
     Vue.component(EfBtn.name, EfBtn)
     Vue.component(EfButtons.name, EfButtons)
