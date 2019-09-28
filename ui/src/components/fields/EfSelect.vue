@@ -55,11 +55,11 @@
 import { isFunction, isString, isPlainObject } from 'is-what'
 import copy from 'copy-anything'
 import merge from 'merge-anything'
-// import { QSelect } from 'quasar'
+import { QSelect } from 'quasar'
 import { big } from './sharedProps.js'
 
 export default {
-  // components: { QSelect },
+  components: { QSelect },
   name: 'EfSelect',
   props: {
     // prop categories: behaviour content general model state style

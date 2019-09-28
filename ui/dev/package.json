@@ -17,8 +17,7 @@
     "commafy-anything": "^1.1.1",
     "copy-anything": "^1.5.0",
     "is-what": "^3.3.1",
-    "merge-anything": "^2.4.1",
-    "quasar": "^1.1.2"
+    "merge-anything": "^2.4.1"
   },
   "devDependencies": {
     "@quasar/app": "^1.1.0"
