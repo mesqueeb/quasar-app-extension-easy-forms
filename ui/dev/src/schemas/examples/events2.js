@@ -9,7 +9,7 @@ export default {
       label: 'Phone nr (hyphenated)',
       subLabel: 'Type any number with `-` or `(  )`',
       events: {
-        input: (val, { fieldInput, formDataNested }) =>
+        input: (val, { fieldInput, formData }) =>
           fieldInput({ id: 'telClean', value: !val ? '' : val.replace(/[^\d]/g, '').trim() }),
       },
     },

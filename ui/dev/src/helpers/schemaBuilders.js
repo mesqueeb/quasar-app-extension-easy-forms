@@ -80,12 +80,11 @@ export function propToPropSchema (propKey, propInfo) {
     subLabel +=
       '\n\n> 👀 Check「Source tab」→「Schema」to see the following code in color and with indentation.'
   }
-  // Create the EfField schema for the prop
+  // Create the EasyField schema for the prop
   return {
     id: propKey,
-    fieldType: component.slice(2),
     component,
-    valueType: type === Number ? 'number' : undefined,
+    type: type === Number ? 'number' : undefined,
     // schema,
     label: propKey,
     subLabel,

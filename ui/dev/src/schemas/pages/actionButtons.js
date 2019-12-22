@@ -37,7 +37,7 @@ An example of a custom button could be:
 actionButtons: [{
   btnLabel: 'log the data',
   events: {
-    click: (event, {formDataNested}) => console.log(formDataNested),
+    click: (event, {formData}) => console.log(formData),
   },
 }]
 \`\`\`
@@ -51,6 +51,8 @@ export default {
   schema: [
     {
       component: 'QMarkdown',
+      noContainers: true,
+      noLineNumbers: true,
       src: description,
     },
   ],

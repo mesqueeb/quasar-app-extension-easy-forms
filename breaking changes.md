@@ -39,14 +39,18 @@ EasyField used to receive this prop as `formMode` but now receives it as just `m
 An individual field could have a different 'mode' by passing `readonly: true` or `rawValue: true`.
 Now when you want to set the 'mode' of a single field, you should just set the mode the same as EasyForms: `mode: 'raw'`
 
+Another change is that EasyForms used to have mode="view" by default, but now it defaults to mode="edit"
+
 **why:**
 Unified syntax. A single prop called "mode" can be set globally at the EasyForm or locally at EasyField.
+I went for "edit" instead of "view" by default because then fields are editable by default and thus closest to their intended state. I think this will cause less confusion.
 
 **how to update code:**
 
 1. replace `formMode` (in evaluated props) with just `mode`
 2. replace `rawValue: true` with `mode: 'raw'`
 3. replace `readonly: true` with `mode: 'view'`
+4. add `mode: 'view'` or `mode="view"` to EasyForms without mode set
 
 ## disable
 
@@ -106,7 +110,10 @@ This can be defined on the EasyForm level or individually on the EasyField level
 
 ## format
 
-The prop called `format` in which you could pass a function is now renamed to `parseValue` and is the opposite from `parseInput`. For clarity! Just search & replace ;)
+The prop called `format` in which you could pass a function is now renamed to `parseValue`.
+This was renamed for clarity because it's the opposite from `parseInput`. Now there is `parseValue` and `parseInput`. Much better!!
+
+Just search & replace ;)
 
 ## innerClasses, innerStyle
 
@@ -172,14 +179,14 @@ You can make title fields prettier via CSS. Eg.
 { component: 'QBtnToggle', spread: true }
 { component: 'QImg' }
 { component: 'QInput' }
-{ component: 'QMarkdown', noLineNumbers: true /* this is a bug fix */ }
+{ component: 'QMarkdown', noContainers: true, /* this is a bug fix */, noLineNumbers: true }
 { component: 'QRange' }
 { component: 'QSelect' }
 { component: 'QSlider' }
 { component: 'QToggle', default: false }
 ```
 
-Some fields might have small differences in behaviour from my previous wrapper components. However, you can check the source code of my wrapper components [here]() and copy the wrapper components to your project if you want.
+Some fields might have small differences in behaviour from my previous wrapper components. However, you can check the [source code of my wrapper components here](https://github.com/mesqueeb/quasar-ui-easy-forms/tree/a6b5c9626e6cf172a42f588a361e3b665e9a840f/ui/src/components/fields) and copy the wrapper components to your project if you want.
 
 No equivalents:
 
@@ -192,14 +199,16 @@ No equivalents:
 { fieldType: 'video' }
 
 // v1.0
-// these don't exist anymore. You can copy my old source code.
+// these don't exist anymore.
 ```
 
-As before, check the source code how I did it.
+You can copy my [old source code](https://github.com/mesqueeb/quasar-ui-easy-forms/tree/a6b5c9626e6cf172a42f588a361e3b665e9a840f/ui/src/components/fields).
+
+It's better to have these components defined locally anyway, then it's much more flexible when you need new functionality.
 
 ## Fields I kept as is:
 
-```js
+```jsack
 // Before:
 { fieldType: 'btn' }
 { fieldType: 'div' }
@@ -211,5 +220,9 @@ As before, check the source code how I did it.
 ```
 
 I updated the name to EfMiniForm to make it easier to understand that this is a mini form, not a full fledged EasyForm.
+
+## formDataNested
+
+`formDataNested` was renamed to just `formData`. Just search & replace ;)
 
 <!-- prettier-ignore-end -->

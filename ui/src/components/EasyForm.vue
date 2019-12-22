@@ -253,7 +253,7 @@ See the documentation on "Action Buttons" for more info.`,
     },
   },
   computed: {
-    formDataNested () {
+    formData () {
       return nestifyObject(this.formDataFlat)
     },
     schemaObject () {
@@ -273,7 +273,7 @@ See the documentation on "Action Buttons" for more info.`,
     },
     cSchema () {
       const self = this
-      const { schema, formDataNested, formDataFlat, innerMode, formId, innerLang } = this
+      const { schema, formData, formDataFlat, innerMode, formId, innerLang } = this
       const overwritableDefaults = {
         // used here & pass
         lang: innerLang,
@@ -287,7 +287,7 @@ See the documentation on "Action Buttons" for more info.`,
         internalErrors: this.internalErrors,
       }
       const forcedDefaults = {
-        formDataNested,
+        formData,
         formDataFlat,
         formId,
       }
@@ -381,7 +381,7 @@ See the documentation on "Action Buttons" for more info.`,
       if (!this.editedFields.includes(id)) this.editedFields.push(id)
       this.$set(this.formDataFlat, id, value)
       this.$emit(EVENTS['field-input'].name, { id, value })
-      this.$emit(EVENTS['input'].name, this.formDataNested)
+      this.$emit(EVENTS['input'].name, this.formData)
     },
     resetState () {
       this.cMode = 'view'

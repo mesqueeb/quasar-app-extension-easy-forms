@@ -1,6 +1,6 @@
 {
   "name": "quasar-ui-easy-forms",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0",
   "author": "Luca Ban - Mesqueeb",
   "description": "A Vue plugin (that uses Quasar components) to easily generate forms by only defining a \"schema\" object.",
   "license": "MIT",

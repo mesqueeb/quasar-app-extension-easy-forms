@@ -15,7 +15,7 @@ export default {
       default: false,
       label: 'Do you have parental consent?',
       subLabel: 'This will be disabled when the first question is `true`.',
-      disable: (val, { formDataNested }) => formDataNested.over18,
+      disable: (val, { formData }) => formData.over18,
     },
   ],
 }

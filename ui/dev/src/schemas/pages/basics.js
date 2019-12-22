@@ -14,9 +14,7 @@ Eg.:
 ]
 \`\`\`
 
-Besides 'id', 'label' and 'component' there are many more fields you can use: subLabel; required; labelPosition; fieldClasses; componentClasses; parseValue; parseInput; events and many more.
-
-Information on each field you can use and what it does, can be found in the interactive preview under "props" on the [Easy Field demo page](/EasyFieldDemo).
+Besides 'id', 'label' and 'component' there are many more props you can pass: subLabel; required; labelPosition; fieldClasses; componentClasses; parseValue; parseInput; events and many more.
 
 #### **Value/Model**
 
@@ -51,6 +49,8 @@ export default {
   schema: [
     {
       component: 'QMarkdown',
+      noContainers: true,
+      noLineNumbers: true,
       src: description,
     },
   ],

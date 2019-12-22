@@ -58,12 +58,16 @@
 import merge from 'merge-anything'
 import copy from 'copy-anything'
 import { isNumber } from 'is-what'
-import { getGenericValueType } from './sharedProps.js'
+import { getUsageDocs } from './sharedProps.js'
 
 export default {
   name: 'EfMiniForm',
   inheritAttrs: false,
-  desc: `EfMiniForm is a component to which you can pass a "schema" just like an EasyForm. The difference is that EfMiniForm is more like a (as the name says) "mini" form. 😃
+  desc: `${getUsageDocs('EfMiniForm')}
+
+### description
+
+With EfMiniForm you can pass a "schema" just like an EasyForm. The difference is that EfMiniForm is more like a (as the name says) "mini" form. 😃
 
 The "schema" you specify is shown as a single row. New rows are added automatically on user input.`,
   props: {
@@ -91,7 +95,7 @@ The "schema" you specify is shown as a single row. New rows are added automatica
 
 This is useful when you want to use Evaluated Props in the schema of the mine form but need information from the top level EasyForm.`,
       default: () => [
-        'formDataNested',
+        'formData',
         'formDataFlat',
         'formId',
         'mode',
@@ -101,7 +105,7 @@ This is useful when you want to use Evaluated Props in the schema of the mine fo
         'required',
         'rules',
       ],
-      examples: [`['formDataNested', 'formId', 'mode', 'fieldInput']`],
+      examples: [`['formData', 'formId', 'mode', 'fieldInput']`],
     },
     maxRows: {
       category: 'content',

@@ -26,9 +26,9 @@ export const responsiveStyle = {
   code: [require('./responsiveStyle').default],
   string: [require('!!raw-loader!./responsiveStyle').default],
 }
-export const selectModel = {
-  code: [require('./selectModel').default],
-  string: [require('!!raw-loader!./selectModel').default],
+export const QSelectModel = {
+  code: [require('./QSelectModel').default],
+  string: [require('!!raw-loader!./QSelectModel').default],
 }
 export const evaluatedProps = {
   code: [

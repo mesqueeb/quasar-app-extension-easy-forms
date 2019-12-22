@@ -10,7 +10,7 @@ export default {
       btnLabel: 'log the data (check console)',
       push: true,
       events: {
-        click: (event, { formDataNested }) => console.log(formDataNested),
+        click: (event, { formData }) => console.log(formData),
       },
     },
   ],

@@ -1,8 +1,6 @@
-import { isPlainObject, isArray } from 'is-what'
+import { isDate, isNumber, isPlainObject, isArray } from 'is-what'
 import commafy from 'commafy-anything'
 import { dateStamp } from './dateHelpers'
-
-const dateFormat = 'YYYY/MM/DD'
 
 /**
  * takes a value and returns the parsed value based on an EasyField blueprint provided.
@@ -18,7 +16,7 @@ const dateFormat = 'YYYY/MM/DD'
  */
 export default function parseFieldValue (value, blueprint) {
   if (!blueprint) return value
-  const { valueType, options, multiple, suffix, prefix } = blueprint
+  const { valueType, dateFormat, options, multiple, suffix, prefix } = blueprint
   let newValue = value
   if (isArray(options)) {
     if (valueType === 'object' && isPlainObject(value)) {
@@ -38,8 +36,8 @@ export default function parseFieldValue (value, blueprint) {
         .join(', ')
     }
   }
-  if (valueType === 'date') newValue = dateStamp(newValue, dateFormat)
-  if (valueType === 'number') newValue = commafy(newValue)
+  if (valueType === 'date' && isDate(value)) newValue = dateStamp(newValue, dateFormat)
+  if (valueType === 'number' && isNumber(value)) newValue = commafy(newValue)
   if (suffix) newValue = `${newValue} ${suffix}`
   if (prefix) newValue = `${prefix} ${newValue}`
   return newValue

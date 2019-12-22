@@ -14,14 +14,14 @@ export default {
       component: 'QInput',
       label: 'What is the brand?',
       subLabel: 'This is only shown when the first question is `true`.',
-      showCondition: (val, { formDataNested }) => formDataNested.car,
+      showCondition: (val, { formData }) => formData.car,
     },
     {
       id: 'carNrPlate',
       component: 'QInput',
       label: 'Enter your license plate brand?',
       subLabel: "This is hidden when the form is set to 'view' mode. Try clicking 'save'.",
-      showCondition: (val, { formDataNested, mode }) => formDataNested.car && mode === 'edit',
+      showCondition: (val, { formData, mode }) => formData.car && mode === 'edit',
     },
   ],
 }

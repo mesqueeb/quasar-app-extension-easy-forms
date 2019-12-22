@@ -1,24 +1,24 @@
 <template>
   <div
-    v-if="showCondition && propsEvaluated.showCondition"
+    v-if="getEvaluatedPropOrAttr('showCondition')"
     :class="[
       'easy-field',
       `easy-field--${mode}`,
       `easy-field--${componentName}`,
       `easy-field--label-${labelPosition}`,
       {
-        'easy-field--no-label': !cLabel,
-        'easy-field--no-sub-label': !cSubLabel,
+        'easy-field--no-label': !labelUsedHere,
+        'easy-field--no-sub-label': !subLabelUsedHere,
         'easy-field--no-component': !component,
       },
-      ...cFieldClassesArray,
+      ...fieldClassesArrayUsedHere,
     ]"
-    :style="cFieldStyle"
+    :style="fieldStyleUsedHere"
   >
     <!-- display: inline -->
-    <div v-if="cLabel" class="easy-field__label text-wrap-all">{{ cLabel }}</div>
+    <div v-if="labelUsedHere" class="easy-field__label text-wrap-all">{{ labelUsedHere }}</div>
     <div
-      v-if="cSubLabel"
+      v-if="subLabelUsedHere"
       :class="[
         'easy-field__sub-label',
         {
@@ -26,36 +26,38 @@
         },
       ]"
     >
-      <q-markdown v-if="hasMarkdown" no-line-numbers no-container>{{ cSubLabel }}</q-markdown>
-      <template v-else>{{ cSubLabel }}</template>
+      <q-markdown v-if="hasMarkdown" no-line-numbers no-container>{{
+        subLabelUsedHere
+      }}</q-markdown>
+      <template v-else>{{ subLabelUsedHere }}</template>
     </div>
     <!-- no component -->
     <template v-if="!component"></template>
     <!-- raw component -->
-    <EfDiv v-else-if="mode === 'raw'" class="easy-field__component" v-bind="divProps" />
+    <EfDiv v-else-if="mode === 'raw'" class="easy-field__component" v-bind="EfDivProps" />
     <!-- raw component -->
     <component
       v-else-if="internalErrorsCalculated"
       :is="component"
-      :class="['easy-field__component', ...cComponentClassesArray]"
+      :class="['easy-field__component', ...componentClassesArrayUsedHere]"
       v-model="cValue"
       v-bind="fieldProps"
-      v-on="cEvents"
-      :style="cComponentStyle"
+      v-on="eventsCalculated"
+      :style="componentStyleUsedHere"
     />
     <QField
       v-else
       v-model="cValue"
-      v-bind="cQFieldProps"
-      :class="['easy-field__component', ...cComponentClassesArray]"
-      :style="cComponentStyle"
+      v-bind="fieldPropsForQField"
+      :class="['easy-field__component', ...componentClassesArrayUsedHere]"
+      :style="componentStyleUsedHere"
     >
       <template v-slot:control>
         <component
           :is="component"
           v-model="cValue"
           v-bind="fieldProps"
-          v-on="cEvents"
+          v-on="eventsCalculated"
           style="flex: 1"
         />
       </template>
@@ -138,8 +140,8 @@ export default {
       type: undefined,
       desc: `A default value to be used when the 'value' is \`undefined\`.
 
-You can also pass a function that will receive two params you can work with: \`(formDataNested, context)\`
-- \`formDataNested\` is the value object of your EasyForm. This will be undefined when EasyField is used as stand-alone (without EasyForm) unless you manually pass it.
+You can also pass a function that will receive two params you can work with: \`(formData, context)\`
+- \`formData\` is the value object of your EasyForm. This will be undefined when EasyField is used as stand-alone (without EasyForm) unless you manually pass it.
 - \`context\` is either your EasyForm or EasyField context with many usefull props. See the documentation on "Evaluated Props" for more info.`,
     },
     required: {
@@ -228,7 +230,7 @@ You can also pass a function that will receive two params you can work with: \`(
     internalLabels,
     internalErrors,
     // passed props:
-    formDataNested: {
+    formData: {
       category: 'easyFormProp',
       type: Object,
       desc: `This is the *nested* data of all the fields inside an EasyForm.`,
@@ -277,12 +279,10 @@ You can also pass a function that will receive two params you can work with: \`(
     },
   },
   data () {
-    const { value, default: df, lang, formDataNested, internalErrors } = this
-    const innerValue = !isUndefined(value) ? value : isFunction(df) ? df(formDataNested, this) : df
+    const { value, default: df, formData, internalErrors } = this
+    const innerValue = !isUndefined(value) ? value : isFunction(df) ? df(formData, this) : df
     // merge user provided lang onto defaults
-    const innerLang = merge(defaultLang, lang)
     return {
-      innerLang,
       innerValue,
     }
   },
@@ -290,8 +290,13 @@ You can also pass a function that will receive two params you can work with: \`(
     value (newValue) {
       this.innerValue = newValue
     },
-    lang (newValue) {
-      this.innerLang = merge(defaultLang, newValue)
+  },
+  methods: {
+    getEvaluatedPropOrAttr (propOrAttr) {
+      const { evaluatedPropsDataObject } = this
+      if (propOrAttr in evaluatedPropsDataObject) return evaluatedPropsDataObject[propOrAttr]
+      if (propOrAttr in this) return this[propOrAttr]
+      return this.$attrs[propOrAttr]
     },
   },
   computed: {
@@ -308,14 +313,25 @@ You can also pass a function that will receive two params you can work with: \`(
         this.$emit('input', val)
       },
     },
+    evaluatedPropsDataObject () {
+      const { evaluatedProps, cValue } = this
+      const context = this
+      return evaluatedProps.reduce((carry, propKey) => {
+        const propValue = propKey in context ? context[propKey] : context.$attrs[propKey]
+        carry[propKey] = evaluateProp(propValue, cValue, context)
+        return carry
+      }, {})
+    },
     componentName () {
-      const { component } = this
+      const { getEvaluatedPropOrAttr } = this
+      const component = getEvaluatedPropOrAttr('component')
       if (isString(component)) return component
       const { name } = component || {}
       return name
     },
     internalErrorsCalculated () {
-      const { internalErrors, componentName } = this
+      const { getEvaluatedPropOrAttr, componentName } = this
+      const internalErrors = getEvaluatedPropOrAttr('internalErrors')
       if (internalErrors !== undefined) return internalErrors
       return [
         'QInput',
@@ -328,79 +344,68 @@ You can also pass a function that will receive two params you can work with: \`(
       ].includes(componentName)
     },
     internalLabelsCalculated () {
-      const { component, internalLabels } = this
+      const { component, getEvaluatedPropOrAttr } = this
+      const internalLabels = getEvaluatedPropOrAttr('internalLabels')
       return internalLabels && !isNullOrUndefined(component)
     },
-    propsEvaluated () {
-      const { evaluatedProps, cValue } = this
+    langCalculated () {
+      const { getEvaluatedPropOrAttr } = this
+      const lang = getEvaluatedPropOrAttr('lang')
+      return merge(defaultLang, lang)
+    },
+    rulesCalculated () {
+      const { getEvaluatedPropOrAttr, langCalculated } = this
+      const required = getEvaluatedPropOrAttr('required')
+      const rules = getEvaluatedPropOrAttr('rules')
+      const requiredRule = val => !isNullOrUndefined(val) || langCalculated['requiredField']
+      return required ? rules.concat([requiredRule]) : rules
+    },
+    eventsCalculated () {
+      const { getEvaluatedPropOrAttr } = this
       const context = this
-      return evaluatedProps.reduce((carry, propKey) => {
-        const propValue = propKey in context ? context[propKey] : context.$attrs[propKey]
-        carry[propKey] = evaluateProp(propValue, cValue, context)
+      const events = getEvaluatedPropOrAttr('events')
+      return Object.entries(events).reduce((carry, [eventName, eventFn]) => {
+        // input event is handled in cValue
+        if (eventName === 'input') return carry
+        carry[eventName] = val => eventFn(val, context)
         return carry
       }, {})
     },
-    divProps () {
-      return merge(this.$attrs, {
-        value: this.value,
-      })
-    },
-    cFieldStyle () {
-      const { fieldStyle, propsEvaluated, evaluatedProps } = this
-      return evaluatedProps.includes('fieldStyle') ? propsEvaluated['fieldStyle'] : fieldStyle
-    },
-    cComponentStyle () {
-      const { componentStyle, propsEvaluated, evaluatedProps } = this
-      return evaluatedProps.includes('componentStyle')
-        ? propsEvaluated['componentStyle']
-        : componentStyle
-    },
-    cFieldClassesArray () {
-      const { fieldClasses, propsEvaluated, evaluatedProps } = this
-      const classes = evaluatedProps.includes('fieldClasses')
-        ? propsEvaluated['fieldClasses']
-        : fieldClasses
-      if (isString(classes)) return classes.split(' ')
-      if (isPlainObject(classes)) return [classes]
-      return classes
-    },
-    cComponentClassesArray () {
-      const { componentClasses, propsEvaluated, evaluatedProps } = this
-      const classes = evaluatedProps.includes('componentClasses')
-        ? propsEvaluated['componentClasses']
-        : componentClasses
-      if (isString(classes)) return classes.split(' ')
-      if (isPlainObject(classes)) return [classes]
-      return classes
-    },
-    cRules () {
-      const { rules, required, evaluatedProps, propsEvaluated, innerLang } = this
-      const req = evaluatedProps.includes('componentClasses') ? propsEvaluated.required : required
-      const requiredRule = val => !isNullOrUndefined(val) || innerLang['requiredField']
-      return req ? rules.concat([requiredRule]) : rules
-    },
     fieldProps () {
       // props only used here: parseValue, parseInput, label
-      const { cValue, $attrs, innerLang, internalLabelsCalculated, propsEvaluated, cRules } = this
-      const self = this
+      const { $props, $attrs, evaluatedPropsDataObject, getEvaluatedPropOrAttr } = this
       // should we pass on label & subLabel (as hint) or not
-      const internalLabelDefaults = !internalLabelsCalculated
-        ? { label: undefined }
-        : { label: this.label, hint: this.subLabel }
-      const mergedProps = merge($attrs, propsEvaluated, internalLabelDefaults, {
-        rules: this.cRules,
-        // EF props used here, but also to pass:
-        formDataNested: this.formDataNested,
-        formDataFlat: this.formDataFlat,
-        mode: this.mode,
-        formId: this.formId,
-        lang: this.innerLang,
-        events: this.cEvents,
-        readonly: this.mode === 'view' || this.readonly,
-      })
+      const labelToPass = !this.internalLabelsCalculated
+        ? undefined
+        : getEvaluatedPropOrAttr('label')
+      const hintToPass = !this.internalLabelsCalculated
+        ? getEvaluatedPropOrAttr('hint')
+        : getEvaluatedPropOrAttr('subLabel')
+      const readonlyToPass =
+        getEvaluatedPropOrAttr('mode') === 'view' || getEvaluatedPropOrAttr('readonly')
+      const mergedProps = merge(
+        // props to pass & which are perhaps replaced by evaluated ones
+        $props,
+        // attributes to pass & which are perhaps replaced by evaluated ones
+        $attrs,
+        // evaluated props
+        evaluatedPropsDataObject,
+        // other props computed after evaluation
+        {
+          lang: this.langCalculated,
+          rules: this.rulesCalculated,
+          events: this.eventsCalculated,
+        },
+        // props with extra calculations just to pass
+        {
+          label: labelToPass,
+          hint: hintToPass,
+          readonly: readonlyToPass,
+        }
+      )
       return mergedProps
     },
-    cQFieldProps () {
+    fieldPropsForQField () {
       // disable prefix suffix for QField
       return merge(this.fieldProps, {
         prefix: undefined,
@@ -409,26 +414,44 @@ You can also pass a function that will receive two params you can work with: \`(
         stackLabel: true,
       })
     },
-    cLabel () {
-      const { label, cValue, internalLabelsCalculated, propsEvaluated, evaluatedProps } = this
-      const _label = evaluatedProps.includes('label') ? propsEvaluated.label : label
-      return internalLabelsCalculated ? undefined : _label
+    labelUsedHere () {
+      const { internalLabelsCalculated, getEvaluatedPropOrAttr } = this
+      return internalLabelsCalculated ? undefined : getEvaluatedPropOrAttr('label')
     },
-    cSubLabel () {
-      const { subLabel, cValue, internalLabelsCalculated, propsEvaluated, evaluatedProps } = this
-      const _subLabel = evaluatedProps.includes('subLabel') ? propsEvaluated.subLabel : subLabel
-      return internalLabelsCalculated ? undefined : _subLabel
+    subLabelUsedHere () {
+      const { internalLabelsCalculated, getEvaluatedPropOrAttr } = this
+      return internalLabelsCalculated ? undefined : getEvaluatedPropOrAttr('subLabel')
     },
-    cEvents () {
-      const { propsEvaluated, evaluatedProps, events } = this
-      const context = this
-      const _events = evaluatedProps.includes('events') ? propsEvaluated.events : events
-      return Object.entries(_events).reduce((carry, [eventName, eventFn]) => {
-        // input event is handled in cValue
-        if (eventName === 'input') return carry
-        carry[eventName] = val => eventFn(val, context)
-        return carry
-      }, {})
+    fieldStyleUsedHere () {
+      return this.getEvaluatedPropOrAttr('fieldStyle')
+    },
+    componentStyleUsedHere () {
+      return this.getEvaluatedPropOrAttr('componentStyle')
+    },
+    fieldClassesArrayUsedHere () {
+      const classes = this.getEvaluatedPropOrAttr('fieldClasses')
+      if (isString(classes)) return classes.split(' ')
+      if (isPlainObject(classes)) return [classes]
+      return classes
+    },
+    componentClassesArrayUsedHere () {
+      const classes = this.getEvaluatedPropOrAttr('componentClasses')
+      if (isString(classes)) return classes.split(' ')
+      if (isPlainObject(classes)) return [classes]
+      return classes
+    },
+    EfDivProps () {
+      const { value, getEvaluatedPropOrAttr } = this
+      return {
+        value: this.value,
+        valueType: getEvaluatedPropOrAttr('valueType'),
+        type: getEvaluatedPropOrAttr('type'),
+        dateFormat: getEvaluatedPropOrAttr('dateFormat'),
+        suffix: getEvaluatedPropOrAttr('suffix'),
+        prefix: getEvaluatedPropOrAttr('prefix'),
+        options: getEvaluatedPropOrAttr('options'),
+        multiple: getEvaluatedPropOrAttr('multiple'),
+      }
     },
   },
 }

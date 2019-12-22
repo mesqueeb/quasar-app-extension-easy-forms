@@ -4,17 +4,21 @@
 
 <script>
 import merge from 'merge-anything'
-// import { isFunction } from 'is-what'
 import { QBtn } from 'quasar'
-import { getGenericValueType } from './sharedProps.js'
+import { getUsageDocs } from './sharedProps.js'
 
 export default {
   components: { QBtn },
   name: 'EfBtn',
   inheritAttrs: false,
-  desc: `EfBtn is a wrapper around QBtn. The only difference is that you can pass the button label as \`btnLabel\`. This is required because when using QBtn it will always use the same label as your field label.
+  desc: `${getUsageDocs('EfBtn')}
 
-It also defaults to \`color: primary\` which is nice. 😄
+### description
+
+EfBtn is a wrapper around QBtn. The only differences are:
+
+- you can pass the button label as \`btnLabel\` (this is required because when using QBtn it will always use the same label as your field label)
+- it defaults to \`color: primary\` which is nice 😄
 
 All other props/attributes are passed on.`,
   props: {

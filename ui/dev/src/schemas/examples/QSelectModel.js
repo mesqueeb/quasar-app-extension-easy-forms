@@ -18,11 +18,16 @@ const createExample = (config, i) => [
   {
     id: `example${i}-m`,
     component: 'QMarkdown',
-    src: (val, { formDataNested }) => formatForMarkdown(formDataNested[`example${i}`]),
+    noContainers: true,
+    noLineNumbers: true,
+    src: (val, { formData }) => formatForMarkdown(formData[`example${i}`]),
+    evaluatedProps: ['src'],
   },
   {
     id: `example${i}-o`,
     component: 'QMarkdown',
+    noContainers: true,
+    noLineNumbers: true,
     fieldClass: 'text-break-all',
     src: formatForMarkdown(config),
   },
@@ -30,21 +35,19 @@ const createExample = (config, i) => [
 
 const exampleConfigs = [
   { span: true, label: 'Single select' },
-  { valueType: 'object' },
-  { valueType: 'string', emitValue: true },
-  { valueType: 'string', emitValue: true, mapOptions: true },
-  { span: true, label: 'Multiple select', subLabel: 'Recommended model' },
-  { valueType: 'object', multiple: true },
-  { span: true, subLabel: 'Other models' },
-  { valueType: 'array', multiple: true },
-  { valueType: 'array', multiple: true, emitValue: true },
-  { valueType: 'array', multiple: true, emitValue: true, mapOptions: true },
+  { component: 'QSelect' },
+  { component: 'QSelect', emitValue: true },
+  { component: 'QSelect', emitValue: true, mapOptions: true },
+  { span: true, subLabel: 'Multiple select' },
+  { component: 'QSelect', multiple: true },
+  { component: 'QSelect', multiple: true, emitValue: true },
+  { component: 'QSelect', multiple: true, emitValue: true, mapOptions: true },
   {
     span: true,
     label: 'Do not do this',
     subLabel: 'Select something and see why 😉',
   },
-  { valueType: 'object', multiple: true, emitValue: true },
+  { component: 'QSelect', multiple: true, emitValue: true },
 ]
 
 export default {
@@ -53,7 +56,7 @@ export default {
   columnCount: 3,
   schema: [
     {
-      subLabel: 'Select some values for each select-field down below, and see what happens.',
+      subLabel: 'Select some values for each QSelect field down below, and see what happens.',
     },
     {
       span: 1,

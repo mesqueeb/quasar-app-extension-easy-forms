@@ -20,6 +20,8 @@ export default {
     {
       id: 'md-input',
       component: 'QMarkdown',
+      noContainers: true,
+      noLineNumbers: true,
       span: 1,
       src: "```js\n{component: 'QInput'}\n```",
     },
@@ -39,6 +41,8 @@ export default {
     {
       id: 'md-btn-toggle',
       component: 'QMarkdown',
+      noContainers: true,
+      noLineNumbers: true,
       span: 1,
       src: "```js\n{component: 'QBtnToggle'}\n```",
     },
@@ -55,6 +59,8 @@ export default {
     {
       id: 'md-slider',
       component: 'QMarkdown',
+      noContainers: true,
+      noLineNumbers: true,
       span: 1,
       src: "```js\n{component: 'QSlider'}\n```",
     },
@@ -71,6 +77,8 @@ export default {
     {
       id: 'md-input-nr',
       component: 'QMarkdown',
+      noContainers: true,
+      noLineNumbers: true,
       span: 1,
       src:
         "```js\n{component: 'QInput'}\n```\n↳ But the input is saved as a number instead of a string.",
@@ -117,6 +125,8 @@ export default {
     {
       id: 'md-select',
       component: 'QMarkdown',
+      noContainers: true,
+      noLineNumbers: true,
       span: 1,
       src: "```js\n{component: 'QSelect'}\n```",
     },
@@ -145,6 +155,8 @@ export default {
     {
       id: 'md-option-group',
       component: 'QMarkdown',
+      noContainers: true,
+      noLineNumbers: true,
       span: 1,
       src: "```js\n{component: 'QOptionGroup'}\n```",
     },
@@ -158,6 +170,8 @@ export default {
     {
       id: 'md-toggle',
       component: 'QMarkdown',
+      noContainers: true,
+      noLineNumbers: true,
       span: 1,
       src: "```js\n{component: 'QToggle'}\n```",
     },
@@ -169,12 +183,17 @@ export default {
       parseInput: val => new Date(val),
       mask: '####/##/##',
       placeholder: 'YYYY/MM/DD',
+      dateFormat: 'YYYY/MM/DD', // see `EfDiv` documentation for more info on `dateFormat`
+      valueType: 'date', // see `EfDiv` documentation for more info on `valueType`
     },
     {
       id: 'md-input-date',
       component: 'QMarkdown',
+      noContainers: true,
+      noLineNumbers: true,
       span: 1,
-      src: "```js\n{component: 'QInput'}\n```",
+      src:
+        "```js\n{component: 'QInput'}\n```\n↳ But the input is saved as a date instead of a string.",
     },
   ],
 }

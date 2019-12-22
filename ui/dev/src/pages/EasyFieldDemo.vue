@@ -63,6 +63,8 @@ export default {
       schema: [
         {
           component: 'QMarkdown',
+          noContainers: true,
+          noLineNumbers: true,
           src: desc,
         },
       ],
@@ -73,7 +75,7 @@ export default {
     return {
       pageValue: { chosenExample: 0 },
       pageForm,
-      examples: examples.map(f => merge({ value: {} }, f)),
+      examples,
       examplesRaw,
       propsSchema,
     }

@@ -24,5 +24,5 @@ export default {
     },
     { component: 'QToggle', label: 'Notify', default: false, id: 'notify' },
   ],
-  value: [],
+  default: [],
 }

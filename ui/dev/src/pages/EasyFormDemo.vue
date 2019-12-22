@@ -64,7 +64,7 @@ export default {
     return {
       pageValue: { chosenExample: 0 },
       pageForm,
-      exampleForms: exampleForms.map(f => merge({ value: {} }, f)),
+      exampleForms,
       exampleFormsRaw,
       propsSchema,
     }

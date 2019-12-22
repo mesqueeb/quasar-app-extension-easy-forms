@@ -20,6 +20,8 @@ export default {
   schema: [
     {
       component: 'QMarkdown',
+      noContainers: true,
+      noLineNumbers: true,
       src: description,
     },
   ],

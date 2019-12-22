@@ -101,11 +101,10 @@ const pagesEasyForm = [
 ]
 
 const pagesEasyField = [
-  // { title: 'Easy Field', path: '/EasyFieldDemo' },
   { title: '<EfMiniForm />', path: '/EasyField/EfMiniForm' },
   { title: '<EfDiv />', path: '/EasyField/EfDiv' },
   { title: '<EfBtn />', path: '/EasyField/EfBtn' },
-  // { title: "component: 'QSelect' models", path: '/selectModel' },
+  { title: "component: 'QSelect'", path: '/QSelectModel' },
 ]
 
 export default {

@@ -1,6 +1,6 @@
 {
   "name": "quasar-app-extension-easy-forms",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0",
   "description": "Easily generate forms by only defining a \"schema\" object.",
   "author": "Luca Ban - Mesqueeb",
   "license": "MIT",
@@ -12,7 +12,7 @@
   "bugs": "https://github.com/mesqueeb/quasar-ui-easy-forms/issues",
   "homepage": "https://quasar-easy-forms.web.app",
   "dependencies": {
-    "quasar-ui-easy-forms": "^1.0.0-beta.2"
+    "quasar-ui-easy-forms": "^1.0.0"
   },
   "engines": {
     "node": ">= 8.9.0",
