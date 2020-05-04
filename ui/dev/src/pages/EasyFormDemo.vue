@@ -22,6 +22,12 @@
         :key="pageValue.chosenExample"
       />
     </InfoCard>
+    <ApiCard
+      filePath="api-cards/EasyForm.vue"
+      v-model="exampleForms[pageValue.chosenExample]"
+      v-on="exampleForms[pageValue.chosenExample].events"
+      :key="pageValue.chosenExample"
+    />
   </q-page>
 </template>
 
@@ -44,6 +50,7 @@
 </style>
 
 <script>
+import { ApiCard } from '@planetar/api-card'
 import { isString, isArray, isPlainObject } from 'is-what'
 import { capitalCase } from 'case-anything'
 import merge from 'merge-anything'
@@ -53,6 +60,7 @@ import { getInfoCardPropsSchema } from '../helpers/schemaBuilders'
 
 export default {
   name: 'EasyFormDemo',
+  components: { ApiCard },
   props: {
     schemaId: String,
   },

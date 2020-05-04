@@ -15,6 +15,7 @@
     "dev:electron": "quasar dev -m electron"
   },
   "dependencies": {
+    "@planetar/api-card": "0.0.3",
     "@quasar/extras": "^1.6.0",
     "@quasar/quasar-ui-qmarkdown": "^1.0.24",
     "case-anything": "^0.3.1",
